@@ -1,6 +1,35 @@
-import { forwardRef, useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 
-export default forwardRef(function TextInput({ type = 'text', className = '', isFocused = false, ...props }, ref) {
+
+Input.PropTypes = {
+    type: PropTypes.oneOf(["text", "password", "email", "number", "file"]),
+    name: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    className: PropTypes.string,
+    variant: PropTypes.oneOf(["primary", "error", "primary-outline"]),
+    autoComplete: PropTypes.string,
+    require: PropTypes.string,
+    isFocused: PropTypes.bool,
+    handleChange: PropTypes.func,
+    placeholder: PropTypes.string,
+    isError: PropTypes.bool,
+};
+
+export default forwardRef(function TextInput(
+    {
+        type = "text",
+        className = "",
+        defaultValue,
+        variant = "primary",
+        placeholder,
+        isError,
+        isFocused = false,
+        ...props
+    },
+    ref
+) {
     const input = ref ? ref : useRef();
 
     useEffect(() => {
@@ -12,12 +41,16 @@ export default forwardRef(function TextInput({ type = 'text', className = '', is
     return (
         <input
             {...props}
+            defaultValue={defaultValue}
             type={type}
             className={
-                'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm ' +
+                'rounded-2xl bg-form-bg py-[13px] px-7 w-full ${isError && "input-error"} input-' +
+                variant +
+                " " +
                 className
             }
             ref={input}
+            placeholder={placeholder}
         />
     );
 });
